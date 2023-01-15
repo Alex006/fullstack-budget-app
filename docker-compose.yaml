@@ -1,0 +1,24 @@
+services:
+  frontend:
+    image: susguzman/w3-frontend:0.1.0-alpine
+    ports:
+      - 8888:80
+  backend:
+    image: susguzman/w3-backend:0.1.0
+    ports:
+      - 3800:3800
+    env_file:
+      - ./backend/.env
+    restart: always
+  mibasededatos:
+    image: gvenzl/oracle-xe:21.3.0
+    ports:
+      - 1521:1521
+    env_file:
+      - ./database/.env
+    volumes:
+      - oradata:/opt/oracle/oradata               # Persistencia
+      - ./database:/container-entrypoint-initdb.d # Script inicial
+volumes:
+  # Persistencia de la base de datos
+  oradata:

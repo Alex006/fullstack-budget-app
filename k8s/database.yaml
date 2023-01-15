@@ -1,0 +1,133 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: database-service
+spec:
+  type: ClusterIP # Servicio Privado
+  selector:
+    app: database
+  ports:
+  - port: 1521
+    targetPort: 1521
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: database
+  template:
+    metadata:
+      labels:
+        app: database
+    spec:
+      securityContext:
+        runAsUser: 54321    # Oracle User 
+        runAsGroup: 54321   # Oinstall group
+        fsGroup: 54321      # Oinstall group
+      volumes:
+      - name: db-init-vol
+        configMap:
+          name: db-init-config
+      - name: db-oradata-vol
+        persistentVolumeClaim:
+          claimName: oracle-pvc
+      containers:
+      - name: database
+        image: gvenzl/oracle-xe:21.3.0
+        env:
+        - name: ORACLE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: ora_pass
+        - name: APP_USER
+          value: appuser
+        - name: APP_USER_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: app_pass
+        resources:
+          limits:
+            memory: "2Gi"
+            cpu: "1"
+        ports:
+        - containerPort: 1521
+        volumeMounts:
+        - name: db-init-vol
+          mountPath: /container-entrypoint-initdb.d
+        - name: db-oradata-vol
+          mountPath: /opt/oracle/oradata
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: oracle-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: db-init-config
+data:
+  init.sql: |
+    ALTER SESSION SET CONTAINER=XEPDB1;
+
+    -- PERSON CREATION
+    CREATE TABLE APPUSER.PERSON (
+      PERSON NUMBER,
+      EMAIL VARCHAR2(100) UNIQUE NOT NULL,
+      PASSWORD VARCHAR2(1000) NOT NULL,
+      PERSON_TOKEN VARCHAR2(1000) NOT NULL,
+      FIRST_NAME VARCHAR2(100) NOT NULL,
+      LAST_NAME VARCHAR2(100) NOT NULL,
+      ADD_DATE DATE DEFAULT SYSDATE,
+      MOD_DATE DATE,
+      PRIMARY KEY(PERSON)
+    );
+
+    -- PERSON SEQUENCE
+    CREATE SEQUENCE APPUSER.SQ_PERSON NOCACHE;
+
+    -- CATEGORY CREATION
+    CREATE TABLE APPUSER.CATEGORY(
+      CATEGORY NUMBER,
+      PERSON NUMBER NOT NULL,
+      NAME VARCHAR2(100) NOT NULL,
+      DESCRIPTION VARCHAR2(200) NOT NULL,
+      ADD_DATE DATE DEFAULT SYSDATE,
+      MOD_DATE DATE,
+      PRIMARY KEY(CATEGORY),
+      FOREIGN KEY(PERSON) REFERENCES APPUSER.PERSON(PERSON)
+    );
+
+    -- CATEGORY SEQUENCE
+    CREATE SEQUENCE APPUSER.SQ_CATEGORY NOCACHE;
+
+    -- CREATE FUNCTION
+    CREATE OR REPLACE FUNCTION APPUSER.API_TOKEN(PSECRET VARCHAR2) RETURN VARCHAR2
+    IS
+        VRESULT VARCHAR2(4000);
+    BEGIN
+      SELECT UTL_RAW.CAST_TO_VARCHAR2(UTL_I18N.STRING_TO_RAW(STANDARD_HASH(PSECRET, 'MD5'), 'AL32UTF8')) INTO VRESULT from dual;
+      RETURN VRESULT;
+    END API_TOKEN;
+    /
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: db-secret
+type: Opaque
+data:
+  ora_pass: bXlwYXNz
+  app_pass: bXlhcHBwYXNz
