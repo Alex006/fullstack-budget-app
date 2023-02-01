@@ -5,7 +5,7 @@
 
 FROM oraclelinux:8.7
 
-LABEL developer="susguzma@gmail.com"
+LABEL developer="cristian.padilla06@gmail.com"
 
 ENV ORACLE_USER=appuser \
     ORACLE_PASS=mipass \

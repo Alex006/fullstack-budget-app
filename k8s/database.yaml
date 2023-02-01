@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: database-service
 spec:
-  type: ClusterIP # Servicio Privado
+  type: ClusterIP # Servicio Privado, si quiero que sea IP Pública, usar LoadBalancer
   selector:
     app: database
   ports:
@@ -15,7 +15,7 @@ kind: Deployment
 metadata:
   name: database
 spec:
-  replicas: 1
+  replicas: 1 #para base de datos, usar uno porque no son clúster de bases de datos
   selector:
     matchLabels:
       app: database

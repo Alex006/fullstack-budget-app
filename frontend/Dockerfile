@@ -5,7 +5,7 @@
 
 FROM node:18.12.1-alpine3.17 as compilacion
 
-LABEL developer="susguzma@gmail.com"
+LABEL developer="cristian.padilla06@gmail.com"
 
 ENV REACT_APP_BACKEND_BASE_URL=http://localhost:3800
 

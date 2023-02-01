@@ -1,10 +1,10 @@
 services:
   frontend:
-    image: susguzman/w3-frontend:0.1.0-alpine
+    image: alex0006/w3-frontend:0.1.0-alpine #myfrontend:0.1.0-alpine
     ports:
       - 8888:80
   backend:
-    image: susguzman/w3-backend:0.1.0
+    image: alex0006/w3-backend:0.1.0 #mybackend:0.1.0
     ports:
       - 3800:3800
     env_file:

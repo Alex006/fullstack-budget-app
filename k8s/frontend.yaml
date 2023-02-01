@@ -26,7 +26,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: susguzman/w3-frontend:0.1.0-alpine-gcp
+        image: alex0006/w3-frontend:0.1.0-alpine
         resources:
           limits:
             memory: "128Mi"

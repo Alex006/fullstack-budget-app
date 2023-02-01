@@ -26,7 +26,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: susguzman/w3-backend:0.1.0
+        image: alex0006/w3-backend:0.1.0
         env:
         - name: ORACLE_USER
           value: appuser

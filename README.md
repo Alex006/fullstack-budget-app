@@ -12,3 +12,8 @@ docker build -t myfrontend:0.1.0-alpine frontend/
 
 # Run Application
 docker compose up
+```
+
+# Creating docker repositories
+docker tag mybackend:0.1.0 alex0006/w3-backend:0.1.0
+docker push alex0006/w3-backend:0.1.0
