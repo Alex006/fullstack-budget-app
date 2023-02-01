@@ -40,7 +40,7 @@ const Login = () => {
         <div className="w-100" style={{ maxWidth: '400px' }}>
           <Card>
             <Card.Body>
-              <h2 className="text-center mb-4">Log In in Budget APP</h2>
+              <h2 className="text-center mb-4">Log In in Budget APP in GCP</h2>
               {error && <Alert variant="danger">{error}</Alert>}
               <Form onSubmit={handleSubmit}>
                 <Form.Group id="email">
