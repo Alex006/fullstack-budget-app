@@ -7,7 +7,9 @@ FROM node:18.12.1-alpine3.17 as compilacion
 
 LABEL developer="cristian.padilla06@gmail.com"
 
-ENV REACT_APP_BACKEND_BASE_URL=http://localhost:3800
+#ENV REACT_APP_BACKEND_BASE_URL=http://localhost:3800
+ENV REACT_APP_BACKEND_BASE_URL=http://35.222.103.201:3800
+
 
 # Copiando mi applicacion
 COPY . /opt/app

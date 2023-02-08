@@ -1,1 +1,2 @@
 #.env #should ignore .env files, it is just for testing
+node_modules

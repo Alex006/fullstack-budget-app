@@ -4,11 +4,11 @@ A backend using express and Oracle as database.
 ## Get Started
 
 ```
-# Setting env vars
-export ORACLE_USER=postgres
-export ORACLE_PASS=<your_pass>
-export ORACLE_CONNSTR=localhost:1521/xepdb1
-export SERVER_PORT=3800
+# Setting env vars in Windows
+set ORACLE_USER=postgres
+set ORACLE_PASS=<your_pass>
+set ORACLE_CONNSTR=localhost:1521/xepdb1
+set SERVER_PORT=3800
 
 npm install
 npm start

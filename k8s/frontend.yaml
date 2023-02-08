@@ -27,6 +27,7 @@ spec:
       containers:
       - name: frontend
         image: alex0006/w3-frontend:0.1.0-alpine
+        imagePullPolicy: Always #as I will reuse the same tag, I will always pull the docker image
         resources:
           limits:
             memory: "128Mi"

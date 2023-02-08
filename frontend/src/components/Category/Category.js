@@ -9,9 +9,10 @@ import {
   Button,
   Spinner,
   ListGroup,
+  Table,
 } from 'react-bootstrap';
 
-const Dashboard = () => {
+const Category = () => {
   const [cookies] = useCookies(['auth_token']);
   const descriptionRef = useRef();
   const nameRef = useRef();
@@ -75,16 +76,14 @@ const Dashboard = () => {
     getAllUserCategories();
   }, []);
 
+
   const userCategoriesList = userCategories.map((category) => {
     return (
-      <ListGroup.Item key={category.category} action>
-        <Card>
-          <Card.Body>
-            <Card.Title>{category.name}</Card.Title>
-            <Card.Text>{category.description}</Card.Text>
-          </Card.Body>
-        </Card>
-      </ListGroup.Item>
+      <tr>
+        <td>{category.category}</td>
+        <td>{category.name}</td>
+        <td>{category.description}</td>
+      </tr>
     );
   });
 
@@ -107,12 +106,7 @@ const Dashboard = () => {
                 <Row className="mb-3">
                   <Form.Group as={Col} controlId="formGridEmail">
                     <Form.Label>Category Description</Form.Label>
-                    <Form.Control
-                      placeholder="..."
-                      as="textarea"
-                      rows={3}
-                      ref={descriptionRef}
-                    />
+                    <Form.Control placeholder="..." ref={descriptionRef} />
                   </Form.Group>
                 </Row>
                 <Row className="mb-3 justify-content-end">
@@ -140,11 +134,22 @@ const Dashboard = () => {
             </Card.Body>
           </Card>
         </Col>
-        <Col md={3} className="d-flex align-items-start justify-content-center">
-          <ListGroup>{userCategoriesList}</ListGroup>
+        <Col md={5}>
+          <h2>My Categories</h2>
+        
+          <Table striped bordered hover size="sm" responsive>
+            <thead>
+              <tr>
+                <th>Category Id</th>
+                <th>Category Name</th>
+                <th>Category Description</th>
+              </tr>
+            </thead>
+            <tbody>{userCategoriesList}</tbody>
+          </Table>
         </Col>
       </Row>
     </Container>
   );
 };
-export default Dashboard;
+export default Category;

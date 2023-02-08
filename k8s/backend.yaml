@@ -27,6 +27,7 @@ spec:
       containers:
       - name: backend
         image: alex0006/w3-backend:0.1.0
+        imagePullPolicy: Always #as I will reuse the same tag, I will always pull the docker image
         env:
         - name: ORACLE_USER
           value: appuser
